@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 /**
  * Exemple de classe lutin
  *
- * @author guillaume.laurent
+ * @author manon.lemestre
  */
 public class Avatar {
 
