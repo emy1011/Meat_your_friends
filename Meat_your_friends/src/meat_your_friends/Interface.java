@@ -6,6 +6,10 @@ package meat_your_friends;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.Timer;
 /**
  *
@@ -70,7 +74,7 @@ public class Interface extends javax.swing.JFrame {
                                 .addGap(39, 39, 39)
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(357, 357, 357)
+                        .addGap(368, 368, 368)
                         .addComponent(jButton1)))
                 .addContainerGap(327, Short.MAX_VALUE))
         );
@@ -85,9 +89,9 @@ public class Interface extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(67, 67, 67)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 294, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(273, Short.MAX_VALUE))
+                .addGap(46, 46, 46))
         );
 
         pack();
@@ -98,7 +102,39 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+
+            try {
+                // 1. Connexion à la base de données (ou utilisation de SingletonJDBC si vous l'avez mis en place)
+                Connection connexion = DriverManager.getConnection("jdbc:mariadb://nemrod.ens2m.fr:3306/2026-2027_s1_vs1_tp2_meat_your_friends", "etudiant", "YTDTvj9TR3CDYCmP");
+
+                // 2. Préparation de la requête avec COUNT(*) (correction des parenthèses)
+                PreparedStatement requete = connexion.prepareStatement("SELECT COUNT(*) FROM joueurs WHERE pseudo = ?");
+                String pseudo = jTextField1.getText();
+                requete.setString(1, pseudo);
+                ResultSet resultat = requete.executeQuery();
+
+                if (resultat.next()) {
+                   
+                    int nombre = resultat.getInt(1);
+
+                    if (nombre == 0) {
+                        System.out.println("Pas dans la base de donnée");
+                        
+                    } else {
+
+                        SalleAttente salleAttente = new SalleAttente(pseudo);
+                        salleAttente.setVisible(true);
+                        this.dispose();
+                    }
+                }
+
+                resultat.close();
+                requete.close();
+                connexion.close();
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
