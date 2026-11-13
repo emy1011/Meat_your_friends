@@ -62,12 +62,13 @@ public class Map {
     }
 
     public void rendu(Graphics2D contexte) {
+    if (tuiles == null) return; // chargement raté
 
-        for (int y = 0; y < hauteur; y++) {
-            for (int x = 0; x < largeur; x++) {
+    for (int y = 0; y < hauteur; y++) {
+        for (int x = 0; x < largeur; x++) {
+            int numeroTuile = decor[y][x];
 
-                int numeroTuile = decor[y][x];
-
+            if (numeroTuile >= 0 && numeroTuile < tuiles.length) {
                 contexte.drawImage(
                     tuiles[numeroTuile],
                     x * tailleTuile,
@@ -76,5 +77,6 @@ public class Map {
                 );
             }
         }
+    }
     }
 }

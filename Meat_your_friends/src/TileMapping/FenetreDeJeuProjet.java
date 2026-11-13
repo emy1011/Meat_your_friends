@@ -1,9 +1,8 @@
-
-
 package TileMapping;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -12,11 +11,19 @@ import javax.swing.SwingConstants;
 
 public class FenetreDeJeuProjet extends JFrame {
 
+    // Passe à false pour masquer les collisions (version finale)
+    private static final boolean DEBUG_COLLISIONS = false;
+//    private static final boolean DEBUG_COLLISIONS = false;
+
+    // Facteur d'agrandissement de l'affichage (1.5 = 50 % plus grand)
+    private static final double ECHELLE = 1.5;
+
     private BufferedImage framebuffer;
     private Graphics2D contexte;
     private JLabel jLabel1;
 
     private Map carte;
+    private CarteColision colisions;
 
     public FenetreDeJeuProjet() {
 
@@ -25,41 +32,56 @@ public class FenetreDeJeuProjet extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
 
-        // Création de la carte
-        carte = new Map();
+        // Création des deux couches
+        carte = new Map();                 // couche visuelle
+        colisions = new CarteColision();   // couche de collision
 
-        // Création du framebuffer de 640 x 640 pixels
+        // Taille du framebuffer calculée à partir des constantes
+        int largeurPx = CarteColision.LARGEUR * CarteColision.TAILLE_TUILE;
+        int hauteurPx = CarteColision.HAUTEUR * CarteColision.TAILLE_TUILE;
+
         framebuffer = new BufferedImage(
-            640, 640, BufferedImage.TYPE_INT_ARGB
+            largeurPx, hauteurPx, BufferedImage.TYPE_INT_ARGB
         );
 
-        // Récupération du contexte graphique
         contexte = framebuffer.createGraphics();
 
-        // Dessin de la carte
+        // 1) La map visuelle
         carte.rendu(contexte);
 
-        // Libération du contexte graphique
+        // 2) Les collisions en rouge (debug)
+        if (DEBUG_COLLISIONS) {
+            colisions.rendu(contexte);
+        }
+
         contexte.dispose();
 
-        // Création du JLabel
+        // Taille affichée à l'écran (agrandissement)
+        int largeurEcran = (int) (largeurPx * ECHELLE);
+        int hauteurEcran = (int) (hauteurPx * ECHELLE);
+
+        // Image agrandie, sans lissage pour garder un rendu net
+        BufferedImage agrandie = new BufferedImage(
+            largeurEcran, hauteurEcran, BufferedImage.TYPE_INT_ARGB
+        );
+        Graphics2D g2 = agrandie.createGraphics();
+        g2.setRenderingHint(
+            RenderingHints.KEY_INTERPOLATION,
+            RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+        );
+        g2.drawImage(framebuffer, 0, 0, largeurEcran, hauteurEcran, null);
+        g2.dispose();
+
         jLabel1 = new JLabel();
-        jLabel1.setPreferredSize(new Dimension(640, 640));
+        jLabel1.setPreferredSize(new Dimension(largeurEcran, hauteurEcran));
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setVerticalAlignment(SwingConstants.CENTER);
-
-        // Affichage de la carte
-        jLabel1.setIcon(new ImageIcon(framebuffer));
+        jLabel1.setIcon(new ImageIcon(agrandie));
 
         this.setContentPane(jLabel1);
 
-        // Ajustement de la fenêtre
         this.pack();
-
-        // Centrage
         this.setLocationRelativeTo(null);
-
-        // Affichage
         this.setVisible(true);
     }
 }
