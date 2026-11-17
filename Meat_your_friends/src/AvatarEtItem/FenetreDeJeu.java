@@ -1,4 +1,4 @@
-package jeu;
+package AvatarEtItem;
 
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;

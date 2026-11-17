@@ -4,7 +4,13 @@
  */
 package meat_your_friends;
 
-import jeu.*;
+import AvatarEtItem.Tomate;
+import AvatarEtItem.Lapin;
+import AvatarEtItem.Carotte;
+import AvatarEtItem.Ours;
+import AvatarEtItem.Vache;
+import AvatarEtItem.Champi;
+import AvatarEtItem.Avatar;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;

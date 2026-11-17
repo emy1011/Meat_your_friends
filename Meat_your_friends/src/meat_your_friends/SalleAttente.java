@@ -27,8 +27,8 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
         initComponents();
         jTextField1.setText(pseudo);
         // Creation du buffer pour l'affichage du jeu et recuperation du contexte graphique
-        this.framebuffer = new BufferedImage(this.jLabel1.getWidth(), this.jLabel1.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        jLabel1.setIcon(new ImageIcon(this.framebuffer));
+        //this.framebuffer = new BufferedImage(this.jLabel1.getWidth(), this.jLabel1.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        //jLabel1.setIcon(new ImageIcon(this.framebuffer));
         this.contexte = this.framebuffer.createGraphics();
 
         // Creation du jeu
@@ -44,7 +44,7 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         this.jeu.miseAJour();
         this.jeu.rendu(contexte);
-        this.jLabel1.repaint();
+        //this.jLabel1.repaint();
         if (this.jeu.estTermine()) {
             this.timer.stop();
         }

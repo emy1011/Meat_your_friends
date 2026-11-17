@@ -1,5 +1,5 @@
 
-package TileMapping;
+package Aymeric;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -23,7 +23,7 @@ public class Map {
         try {
             // Chargement de l'image complète
             BufferedImage tileset = ImageIO.read(
-                getClass().getResource("images/map.png")
+                getClass().getResource("resources/map.png")
             );
 
             // Calcul du nombre de tuiles dans l'image

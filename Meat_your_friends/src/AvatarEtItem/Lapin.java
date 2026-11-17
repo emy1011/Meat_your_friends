@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jeu;
+package AvatarEtItem;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-public class Vache {
+public class Lapin {
 
     protected BufferedImage sprite;
     protected double x, y;
@@ -20,13 +20,13 @@ public class Vache {
     private int delaiRespawn = 0;
     private int direction = 0;
     private int compteurDeplacement = 0;
-    private int vie = 90;
+    private int vie = 30;
 
-    public Vache() {
+    public Lapin() {
         try {
-            this.sprite = ImageIO.read(getClass().getResource("../resources/vache.png"));
+            this.sprite = ImageIO.read(getClass().getResource("../resources/lapin.png"));
         } catch (IOException ex) {
-            Logger.getLogger(Vache.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Lapin.class.getName()).log(Level.SEVERE, null, ex);
         }
         placer();
     }
@@ -38,13 +38,13 @@ public class Vache {
             if (delaiRespawn <= 0) {
                 placer();
                 ramasse = false;
-                vie = 90;
+                vie = 30;
             }
 
             return;
         }
 
-        deplacementVache();
+        deplacementLapin();
     }
 
     public void rendu(Graphics2D contexte) {
@@ -58,11 +58,11 @@ public class Vache {
         this.y = Math.random() * 300;
     }
 
-    public void deplacementVache() {
+    public void deplacementLapin() {
         // Choisir une nouvelle direction toutes les 20 mises à jour
         if (compteurDeplacement == 0) {
             direction = (int) (Math.random() * 4);
-            compteurDeplacement = 20;
+            compteurDeplacement = 30;
         }
 
         double ancienX = x;
@@ -70,16 +70,16 @@ public class Vache {
 
         switch (direction) {
             case 0:
-                x += 1;
+                x += 8;
                 break;
             case 1:
-                x -= 1;
+                x -=8;
                 break;
             case 2:
-                y += 1;
+                y += 8;
                 break;
             case 3:
-                y -= 1;
+                y -= 8;
                 break;
         }
 
@@ -118,7 +118,7 @@ public class Vache {
         }
 
         // Vérifier que le clic est sur la vache
-        boolean clicSurVache
+        boolean clicSurLapin
                 = sourisX >= x
                 && sourisX <= x + getLargeur()
                 && sourisY >= y
@@ -133,7 +133,7 @@ public class Vache {
 
         double distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (clicSurVache && distance <= 50) {
+        if (clicSurLapin && distance <= 50) {
             vie -= 30;
 
             if (vie < 0) {
@@ -141,7 +141,7 @@ public class Vache {
             }
 
             if (vie == 0) {
-                av.getInventaire().ajouterItem(new Item("Steak"));
+                av.getInventaire().ajouterItem(new Item("Civet"));
                 ramasse = true;
                 delaiRespawn = 120;
             }
