@@ -4,8 +4,10 @@
  */
 package meat_your_friends;
 
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,13 +19,32 @@ import javax.swing.Timer;
  */
 public class Interface extends javax.swing.JFrame {
     
+    // private Map map; il faudra là mettre celle de rico
+    private Graphics2D contexte;
+    private Jeu jeu;
+    private Timer timer;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Interface.class.getName());
 
     /**
      * Creates new form Interface
      */
     public Interface() {
+        
         initComponents();
+        this.jeu = new Jeu();
+        this.timer = new Timer(1000, this);
+        this.timer.start();
+    }
+    
+       // Methode appelee par le timer et qui effectue la boucle de jeu
+    public void actionPerformed(ActionEvent e) {
+        this.jeu.miseAJour();
+        this.jeu.rendu(contexte);
+        this.jLabel1.repaint();
+        if (this.jeu.estTermine()) {
+            this.timer.stop();
+        }
     }
 
     /**
