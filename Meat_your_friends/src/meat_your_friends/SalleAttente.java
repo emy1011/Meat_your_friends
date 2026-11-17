@@ -48,34 +48,33 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
     
 
     // Methode appelee par le timer et qui effectue la boucle de jeu
+
     @Override
-            
 public void actionPerformed(ActionEvent e) {
 
     // Mise à jour du jeu
     this.jeu.miseAJour();
 
-    // Dessin du jeu dans le framebuffer
+    // Effacer l'image précédente
+    this.contexte.clearRect(
+        0,
+        0,
+        framebuffer.getWidth(),
+        framebuffer.getHeight()
+    );
+
+    // Dessiner le jeu
     this.jeu.rendu(contexte);
 
-    // Actualisation du JPanel
-    jPanel1 = new javax.swing.JPanel() {
+    // Actualiser le JPanel
+    this.jPanel1.repaint();
 
-    @Override
-    protected void paintComponent(java.awt.Graphics g) {
-        super.paintComponent(g);
-
-        if (framebuffer != null) {
-            g.drawImage(framebuffer, 0, 0, this);
-
-        }
-    }
-};
-
+    // Vérifier si le jeu est terminé
     if (this.jeu.estTermine()) {
         this.timer.stop();
     }
 }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
