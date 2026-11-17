@@ -7,7 +7,7 @@
  *
  * @author mlemestr
  */
-package jeu;
+package AvatarEtItem;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

@@ -1,4 +1,4 @@
-package jeu;
+package AvatarEtItem;
 
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -14,9 +14,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * Exemple de fenetre de jeu en utilisant uniquement des commandes
+
  *
- * @author guillaume.laurent
+ * @author
  */
 public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener, MouseListener {
 
