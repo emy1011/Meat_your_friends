@@ -1,8 +1,10 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-package jeu;
+package AvatarEtItem; //vache
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -10,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-public class Ours {
+public class Vache {
 
     protected BufferedImage sprite;
     protected double x, y;
@@ -18,74 +20,32 @@ public class Ours {
     private int delaiRespawn = 0;
     private int direction = 0;
     private int compteurDeplacement = 0;
-    private int vie = 300;
-    private int delaiAttaque = 0;
-    private int degats = 100;
+    private int vie = 90;
 
-    public Ours() {
+    public Vache() {
         try {
-            this.sprite = ImageIO.read(getClass().getResource("../resources/ours.png"));
+            this.sprite = ImageIO.read(getClass().getResource("../resources/vache.png"));
         } catch (IOException ex) {
             Logger.getLogger(Vache.class.getName()).log(Level.SEVERE, null, ex);
         }
         placer();
     }
 
-public void miseAJour(Avatar av) {
+    public void miseAJour(Avatar av) {
+        if (ramasse) {
+            delaiRespawn--;
 
-    if (ramasse) {
-        delaiRespawn--;
-
-        if (delaiRespawn <= 0) {
-            placer();
-            ramasse = false;
-            vie = 300;
-        }
-        return;
-    }
-
-    if (av.estMort()) {
-        deplacementOurs();
-        return;
-    }
-
-    if (delaiAttaque > 0) {
-        delaiAttaque--;
-    }
-
-    double dx = (av.getX() + av.getLargeur() / 2)
-            - (x + getLargeur() / 2);
-
-    double dy = (av.getY() + av.getHauteur() / 2)
-            - (y + getHauteur() / 2);
-
-    double distance = Math.sqrt(dx * dx + dy * dy);
-
-    // L'Avatar est à portée de détection
-    if (distance <= 200) {
-
-        // L'ours est assez proche pour attaquer
-        if (distance <= 50) {
-
-            if (delaiAttaque == 0) {
-                av.recevoirDegats(degats);
-                delaiAttaque = 60;
+            if (delaiRespawn <= 0) {
+                placer();
+                ramasse = false;
+                vie = 90;
             }
 
-        } else {
-
-            // L'ours poursuit l'Avatar
-            x += (dx / distance) * 2;
-            y += (dy / distance) * 2;
+            return;
         }
 
-    } else {
-
-        // Déplacement aléatoire
-        deplacementOurs();
+        deplacementVache();
     }
-}
-    
 
     public void rendu(Graphics2D contexte) {
         if (vie > 0 && sprite != null) {
@@ -94,11 +54,11 @@ public void miseAJour(Avatar av) {
     }
 
     public void placer() {
-        this.x = 300+Math.random() * 300;
-        this.y = 300+Math.random() * 300;
+        this.x = Math.random() * 300;
+        this.y = Math.random() * 300;
     }
 
-    public void deplacementOurs() {
+    public void deplacementVache() {
         // Choisir une nouvelle direction toutes les 20 mises à jour
         if (compteurDeplacement == 0) {
             direction = (int) (Math.random() * 4);
@@ -124,7 +84,7 @@ public void miseAJour(Avatar av) {
         }
 
         // Si la vache sort de la zone, annuler le mouvement
-        if (x < 300 || x > 600 || y < 300 || y > 600) {
+        if (x < 0 || x > 300 || y < 0 || y > 300) {
             x = ancienX;
             y = ancienY;
 
@@ -158,7 +118,7 @@ public void miseAJour(Avatar av) {
         }
 
         // Vérifier que le clic est sur la vache
-        boolean clicSurOurs
+        boolean clicSurVache
                 = sourisX >= x
                 && sourisX <= x + getLargeur()
                 && sourisY >= y
@@ -173,7 +133,7 @@ public void miseAJour(Avatar av) {
 
         double distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (clicSurOurs && distance <= 75) {
+        if (clicSurVache && distance <= 50) {
             vie -= 30;
 
             if (vie < 0) {
@@ -181,13 +141,11 @@ public void miseAJour(Avatar av) {
             }
 
             if (vie == 0) {
-                av.getInventaire().ajouterItem(new Item("brin"));
+                av.getInventaire().ajouterItem(new Item("Steak"));
                 ramasse = true;
                 delaiRespawn = 120;
             }
         }
     }
 
-
 }
-

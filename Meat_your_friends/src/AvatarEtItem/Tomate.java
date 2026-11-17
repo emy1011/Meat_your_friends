@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jeu;
+package AvatarEtItem;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -13,18 +13,18 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 
-public class Carotte {
+public class Tomate {
 
     protected BufferedImage sprite;
     protected double x, y;
     private boolean ramasse;
     private int delaiRespawn = 0;
 
-    public Carotte() {
+    public Tomate() {
         try {
-            this.sprite = ImageIO.read(getClass().getResource("../resources/carotte.png"));
+            this.sprite = ImageIO.read(getClass().getResource("../resources/tomate.png"));
         } catch (IOException ex) {
-            Logger.getLogger(Carotte.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tomate.class.getName()).log(Level.SEVERE, null, ex);
         }
         placer();
     }
@@ -87,7 +87,7 @@ public class Carotte {
                 && av.getY() + av.getHauteur() > y;
 
         if (collision) {
-            av.getInventaire().ajouterItem(new Item("Carotte"));
+            av.getInventaire().ajouterItem(new Item("Tomate"));
 
             // La carotte disparaît
             ramasse = true;
