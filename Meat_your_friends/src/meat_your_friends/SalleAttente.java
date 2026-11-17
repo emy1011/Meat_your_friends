@@ -24,6 +24,7 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
      * Creates new form NewJFrame
      */
     public SalleAttente(String pseudo) {
+
         initComponents();
         jTextField1.setText(pseudo);
         // Creation du buffer pour l'affichage du jeu et recuperation du contexte graphique
@@ -31,24 +32,50 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
         //jLabel1.setIcon(new ImageIcon(this.framebuffer));
         this.contexte = this.framebuffer.createGraphics();
 
-        // Creation du jeu
-        this.jeu = new Jeu();
-        this.pseudo = pseudo;
-        // Creation du Timer qui appelle this.actionPerformed() tous les 1 s
-        this.timer = new Timer(1000, this);
-        this.timer.start();
-    }
+
+
+    initComponents();
+
+    jTextField1.setText(pseudo);
+
+    this.pseudo = pseudo;
+    this.jeu = new Jeu();
+    this.framebuffer = new BufferedImage(jPanel1.getWidth(),jPanel1.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    this.contexte = framebuffer.createGraphics();
+    this.timer = new Timer(16, this);
+    this.timer.start();
+}
+    
 
     // Methode appelee par le timer et qui effectue la boucle de jeu
     @Override
-    public void actionPerformed(ActionEvent e) {
-        this.jeu.miseAJour();
-        this.jeu.rendu(contexte);
-        //this.jLabel1.repaint();
-        if (this.jeu.estTermine()) {
-            this.timer.stop();
+            
+public void actionPerformed(ActionEvent e) {
+
+    // Mise à jour du jeu
+    this.jeu.miseAJour();
+
+    // Dessin du jeu dans le framebuffer
+    this.jeu.rendu(contexte);
+
+    // Actualisation du JPanel
+    jPanel1 = new javax.swing.JPanel() {
+
+    @Override
+    protected void paintComponent(java.awt.Graphics g) {
+        super.paintComponent(g);
+
+        if (framebuffer != null) {
+            g.drawImage(framebuffer, 0, 0, this);
+
         }
     }
+};
+
+    if (this.jeu.estTermine()) {
+        this.timer.stop();
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -60,7 +87,6 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -80,8 +106,6 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
             }
         });
 
-        jButton1.setText("jButton1");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -98,10 +122,8 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addGap(15, 15, 15)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(920, Short.MAX_VALUE))
         );
@@ -112,13 +134,8 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(15, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(340, 340, 340))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(321, 321, 321))))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(321, 321, 321))
         );
 
         pack();
@@ -247,7 +264,6 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
