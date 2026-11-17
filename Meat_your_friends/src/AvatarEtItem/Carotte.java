@@ -13,85 +13,21 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 
-public class Carotte {
-
-    protected BufferedImage sprite;
-    protected double x, y;
-    private boolean ramasse;
-    private int delaiRespawn = 0;
+public class Carotte extends Legume {
 
     public Carotte() {
+        super();
+        this.nom_item = "Carotte";     // Ou viande de lapin selon ton jeu
+        this.xmin=0;
+        this.xmax=300;
+        this.ymin=0;
+        this.ymax=300;
+
         try {
-            this.sprite = ImageIO.read(getClass().getResource("../resources/carotte.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Carotte.class.getName()).log(Level.SEVERE, null, ex);
+            this.sprite = ImageIO.read(getClass().getResource("/resources/carotte.png")); // Adapte le chemin de ton image
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         placer();
-    }
-
-    public void miseAJour(Avatar av) {
-        if (ramasse) {
-            delaiRespawn--;
-
-            if (delaiRespawn <= 0) {
-                placer();
-            }
-
-            return;
-        }
-
-        verifierRamassage(av);
-    }
-
-    public void rendu(Graphics2D contexte) {
-        if (!ramasse && sprite != null) {
-            contexte.drawImage(sprite, (int) x, (int) y, null);
-        }
-    }
-
-    public void placer() {
-        this.x = Math.random() * 960;
-        this.y = Math.random() * 960;
-        this.ramasse = false;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double getLargeur() {
-        return sprite.getHeight();
-    }
-
-    public double getHauteur() {
-        return sprite.getWidth();
-    }
-
-    public boolean estRamasse() {
-        return ramasse;
-    }
-
-    public void verifierRamassage(Avatar av) {
-        if (ramasse || sprite == null) {
-            return;
-        }
-
-        boolean collision
-                = av.getX() < x + getLargeur()
-                && av.getX() + av.getLargeur() > x
-                && av.getY() < y + getHauteur()
-                && av.getY() + av.getHauteur() > y;
-
-        if (collision) {
-            av.getInventaire().ajouterItem(new Item("Carotte"));
-
-            // La carotte disparaît
-            ramasse = true;
-            delaiRespawn = 120;
-        }
     }
 }
