@@ -30,7 +30,7 @@ public class Avatar {
     private int vie = 300;
     private boolean mort = false;
     private int delaiRespawn = 0;
-    private Map map;
+    //private Map map;
 
     public Avatar() {
         try {
@@ -167,27 +167,28 @@ public class Avatar {
         return mort;
     }
     
-    private void deplacer(String pseudo,double dLat, double dLon) {
-        try {
-            Connection connexion = SingletonJDBC.getInstance().getConnection();
-            PreparedStatement requete = connexion.prepareStatement(
-                    "UPDATE dresseurs SET "
-                    + "latitude = LEAST(?, GREATEST(?, latitude + ?)), "
-                    + "longitude = LEAST(?, GREATEST(?, longitude + ?)) "
-                    + "WHERE pseudo = ?");
-            requete.setDouble(1, map.LATITUDE_MAX);
-            requete.setDouble(2, map.LATITUDE_MIN);
-            requete.setDouble(3, dLat);
-            requete.setDouble(4, map.LONGITUDE_MAX);
-            requete.setDouble(5, map.LONGITUDE_MIN);
-            requete.setDouble(6, dLon);
-            requete.setString(7, pseudo);
-            requete.executeUpdate();
-            requete.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
+
+    //private void deplacer(String pseudo,double dLat, double dLon) {
+    //    try {
+    //        Connection connexion = SingletonJDBC.getInstance().getConnection();
+    //        PreparedStatement requete = connexion.prepareStatement(
+    //                "UPDATE dresseurs SET "
+    //                + "latitude = LEAST(?, GREATEST(?, latitude + ?)), "
+    //                + "longitude = LEAST(?, GREATEST(?, longitude + ?)) "
+    //                + "WHERE pseudo = ?");
+    //        requete.setDouble(1, map.LATITUDE_MAX);
+    //        requete.setDouble(2, map.LATITUDE_MIN);
+    //        requete.setDouble(3, dLat);
+    //        requete.setDouble(4, map.LONGITUDE_MAX);
+    //        requete.setDouble(5, map.LONGITUDE_MIN);
+    //        requete.setDouble(6, dLon);
+    //        requete.setString(7, pseudo);
+    //        requete.executeUpdate();
+    //        requete.close();
+    //    } catch (SQLException ex) {
+    //        ex.printStackTrace();
+    //    }
+    //}
     
     private void CreationJoueur(String pseudo) {
         try {
@@ -204,4 +205,5 @@ public class Avatar {
         }
     }
     
+
 }
