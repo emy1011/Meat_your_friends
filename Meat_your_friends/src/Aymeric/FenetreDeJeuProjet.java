@@ -1,4 +1,4 @@
-package TileMapping;
+package Aymeric;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -22,7 +22,7 @@ public class FenetreDeJeuProjet extends JFrame {
     private Graphics2D contexte;
     private JLabel jLabel1;
 
-    private Map carte;
+    private Map carte_1;
     private CarteColision colisions;
 
     public FenetreDeJeuProjet() {
@@ -33,7 +33,7 @@ public class FenetreDeJeuProjet extends JFrame {
         this.setResizable(false);
 
         // Création des deux couches
-        carte = new Map();                 // couche visuelle
+        carte_1 = new Map();                 // couche visuelle
         colisions = new CarteColision();   // couche de collision
 
         // Taille du framebuffer calculée à partir des constantes
@@ -47,7 +47,7 @@ public class FenetreDeJeuProjet extends JFrame {
         contexte = framebuffer.createGraphics();
 
         // 1) La map visuelle
-        carte.rendu(contexte);
+        carte_1.rendu(contexte);
 
         // 2) Les collisions en rouge (debug)
         if (DEBUG_COLLISIONS) {
