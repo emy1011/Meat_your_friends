@@ -14,9 +14,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * Exemple de fenetre de jeu en utilisant uniquement des commandes
+
  *
- * @author guillaume.laurent
+ * @author
  */
 public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener, MouseListener {
 
