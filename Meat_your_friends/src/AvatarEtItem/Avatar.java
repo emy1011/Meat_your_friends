@@ -188,5 +188,20 @@ public class Avatar {
             ex.printStackTrace();
         }
     }
-
+    
+    private void CreationJoueur(String pseudo) {
+        try {
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+            PreparedStatement requete = connexion.prepareStatement("INSERT INTO Joueurs VALUES (?, ?, ?, NOW(),0)");
+            
+            requete.setString(1, pseudo);
+            requete.setDouble(2,10.0);
+            requete.setDouble(3, 10.0);
+            requete.executeUpdate();
+            requete.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
 }

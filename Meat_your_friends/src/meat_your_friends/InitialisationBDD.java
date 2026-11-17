@@ -28,10 +28,11 @@ public class InitialisationBDD {
 
             Statement statement = connexion.createStatement() ;
    
+            statement.executeUpdate("DELETE FROM Joueurs;");
             
             ResultSet resultat3 = statement.executeQuery("SELECT * FROM Joueurs");
             ResultSet resultat1 = statement.executeQuery("SELECT * FROM Animaux");
-            ResultSet resultat2 = statement.executeQuery("SELECT * FROM objets");
+            ResultSet resultat2 = statement.executeQuery("SELECT * FROM Legumes");
             OutilsJDBC.afficherResultSet(resultat1);
             OutilsJDBC.afficherResultSet(resultat2);
             OutilsJDBC.afficherResultSet(resultat3);
