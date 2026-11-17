@@ -1,4 +1,4 @@
-package TileMapping;
+package Aymeric;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -43,7 +43,7 @@ public class Carte {
 
     public Carte() {
         try {
-            BufferedImage tileset = ImageIO.read(getClass().getResource("images/map.png"));
+            BufferedImage tileset = ImageIO.read(getClass().getResource("resources/map.png"));
             
             int colonnes = tileset.getWidth() / tailleTuile;
             

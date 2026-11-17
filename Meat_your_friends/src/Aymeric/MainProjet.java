@@ -1,5 +1,5 @@
 
-package TileMapping;
+package Aymeric;
 
 import java.awt.EventQueue;
 
