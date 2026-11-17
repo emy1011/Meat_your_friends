@@ -25,15 +25,7 @@ public class SalleAttente extends javax.swing.JFrame implements ActionListener {
      */
     public SalleAttente(String pseudo) {
 
-        initComponents();
-        jTextField1.setText(pseudo);
-        // Creation du buffer pour l'affichage du jeu et recuperation du contexte graphique
-        //this.framebuffer = new BufferedImage(this.jLabel1.getWidth(), this.jLabel1.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        //jLabel1.setIcon(new ImageIcon(this.framebuffer));
-        this.contexte = this.framebuffer.createGraphics();
-
-
-
+   
     initComponents();
 
     jTextField1.setText(pseudo);
