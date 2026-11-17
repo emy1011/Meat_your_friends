@@ -36,7 +36,7 @@ public class Jeu {
         }
         this.score = 0;
         this.uneCarotte = new Carotte();
-        this.av = new Avatar();
+        this.av = new Avatar("blabla");
         this.uneVache = new Vache();
         this.unOurs=new Ours();
         this.unChampi= new Champi();
@@ -66,6 +66,11 @@ public class Jeu {
                 960
         );
     }
+    public boolean collisionAnimal() {
+    return av.collision(uneVache)
+            || av.collision(unOurs)
+            || av.collision(unLapin);
+}
  
     public void miseAJour() {
         this.uneCarotte.miseAJour(this.av);
@@ -74,7 +79,7 @@ public class Jeu {
         this.unChampi.miseAJour(this.av);
         this.uneTomate.miseAJour(this.av);
         this.unLapin.miseAJour(this.av);
-        this.av.miseAJour();
+        this.av.miseAJour(this);
 
 // 1. Mise à jour de l’avatar en fonction des commandes des joueurs
 // 2. Mise à jour des autres éléments (objets, monstres, etc.)

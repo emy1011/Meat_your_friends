@@ -53,7 +53,7 @@ public class Animal {
             return;
         }
 
-        deplacementAnimal();
+        deplacementAnimal(av);
     }
 
     public void rendu(Graphics2D contexte) {
@@ -67,7 +67,7 @@ public class Animal {
         this.y = Math.random() * 300;
     }
 
-    public void deplacementAnimal() {
+    public void deplacementAnimal(Avatar av) {
         // Choisir une nouvelle direction toutes les 20 mises à jour
         if ( deplacement == 0) {
             direction = (int) (Math.random() * 4);
@@ -93,7 +93,7 @@ public class Animal {
         }
 
         // Si la vache sort de la zone, annuler le mouvement
-        if (x < xmin || x > xmax || y < ymin || y > ymax) {
+        if (x < xmin || x > xmax || y < ymin || y > ymax || this.collision(av)) {
             x = ancienX;
             y = ancienY;
 
@@ -119,6 +119,12 @@ public class Animal {
     public double getHauteur() {
         return sprite.getWidth();
     }
+        public boolean collision(Avatar av){
+    return av.getX() < x + getLargeur()
+                && av.getX() + av.getLargeur() > x
+                && av.getY() < y + getHauteur()
+                && av.getY() + av.getHauteur() > y;
+ }
 
     public void attaquer(Avatar av, int sourisX, int sourisY) {
 

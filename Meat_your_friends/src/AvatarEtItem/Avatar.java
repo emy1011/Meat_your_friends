@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
 import outils.SingletonJDBC;
 
 /**
- * Exemple de classe lutin
+ *
  *
  * @author manon.lemestre
  */
@@ -31,8 +31,9 @@ public class Avatar {
     private boolean mort = false;
     private int delaiRespawn = 0;
     private Map map;
+    private String nom;
 
-    public Avatar() {
+    public Avatar(String nom) {
         try {
             this.sprite = ImageIO.read(getClass().getResource("../resources/cuisto.png"));
         } catch (IOException ex) {
@@ -45,9 +46,10 @@ public class Avatar {
         this.toucheBas = false;
         this.toucheHaut = false;
         this.inventaire = new Inventaire();
+        this.nom = nom;
     }
 
-    public void miseAJour() {
+    public void miseAJour(Jeu jeu) {
 
         if (mort) {
             miseAJourRespawn();
@@ -55,11 +57,11 @@ public class Avatar {
         }
 
         if (toucheGauche) {
-            x -= 5;
+            deplacerGauche(jeu);
         }
 
         if (toucheDroite) {
-            x += 5;
+            deplacerDroite(jeu);
         }
 
         if (x > 960 - sprite.getWidth()) {
@@ -71,11 +73,11 @@ public class Avatar {
         }
 
         if (toucheBas) {
-            y += 5;
+            deplacerBas(jeu);
         }
 
         if (toucheHaut) {
-            y -= 5;
+            deplacerHaut(jeu);
         }
 
         if (y > 960 - sprite.getHeight()) {
@@ -84,6 +86,34 @@ public class Avatar {
 
         if (y < 0) {
             y = 0;
+        }
+    }
+
+    public void deplacerDroite(Jeu jeu) {
+        x += 5;
+        if (jeu.collisionAnimal()) {
+            x -= 5;
+        }
+    }
+
+    public void deplacerGauche(Jeu jeu) {
+        x -= 5;
+        if (jeu.collisionAnimal()) {
+            x += 5;
+        }
+    }
+
+    public void deplacerHaut(Jeu jeu) {
+        y -= 5;
+        if (jeu.collisionAnimal()) {
+            y += 5;
+        }
+    }
+
+    public void deplacerBas(Jeu jeu) {
+        y += 5;
+        if (jeu.collisionAnimal()) {
+            y -= 5;
         }
     }
 
@@ -159,6 +189,13 @@ public class Avatar {
         }
     }
 
+    public boolean collision(Animal an) {
+        return an.getX() < x + getLargeur()
+                && an.getX() + an.getLargeur() > x
+                && an.getY() < y + getHauteur()
+                && an.getY() + an.getHauteur() > y;
+    }
+
     public void perdreInventaire() {
         inventaire.vider();
     }
@@ -166,8 +203,8 @@ public class Avatar {
     public boolean estMort() {
         return mort;
     }
-    
-    private void deplacer(String pseudo,double dLat, double dLon) {
+
+    private void deplacer(String pseudo, double dLat, double dLon) {
         try {
             Connection connexion = SingletonJDBC.getInstance().getConnection();
             PreparedStatement requete = connexion.prepareStatement(
