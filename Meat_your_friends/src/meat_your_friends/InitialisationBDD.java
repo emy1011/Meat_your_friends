@@ -28,64 +28,14 @@ public class InitialisationBDD {
 
             Statement statement = connexion.createStatement() ;
    
-            /**
-            statement.executeUpdate("INSERT INTO dresseurs (pseudo, email, motDePasse, latitude, longitude, derniereConnexion) "
-                    + "VALUES ('sacha', 'sacha@ens2m.org', MD5('1234'), 47.250221, 5.995451, NOW())");
             
-            statement.executeUpdate("INSERT INTO dresseurs (pseudo, email, motDePasse, latitude, longitude, derniereConnexion) "
-                    + "VALUES ('ondine', 'ondine@ens2m.org', MD5('1234'), 47.250475, 5.993025, NOW())");
-            
-            statement.executeUpdate("INSERT INTO dresseurs (pseudo, email, motDePasse, latitude, longitude, derniereConnexion) "
-                    + "VALUES ('james', 'james@ens2m.org', MD5('1234'), 47.251617, 5.993995, NOW())");
-            
-            statement.executeUpdate("INSERT INTO dresseurs (pseudo, email, motDePasse, latitude, longitude, derniereConnexion) "
-                    + "VALUES ('jessie', 'jessie@ens2m.org', MD5('1234'), 47.251848, 5.993777, NOW())");
-            
-            statement.executeUpdate("INSERT INTO dresseurs (pseudo, email, motDePasse, latitude, longitude, derniereConnexion) "
-                    + "VALUES ('flora', 'flora@ens2m.org', MD5('1234'), 47.251082, 5.993007, NOW())");
-            
-            statement.executeUpdate("INSERT INTO dresseurs (pseudo, email, motDePasse, latitude, longitude, derniereConnexion) "
-                    + "VALUES ('pierre', 'pierre@ens2m.org', MD5('1234'), 47.250221, 5.992052, NOW())");
-            **/
             ResultSet resultat3 = statement.executeQuery("SELECT * FROM Joueurs");
             ResultSet resultat1 = statement.executeQuery("SELECT * FROM Animaux");
             ResultSet resultat2 = statement.executeQuery("SELECT * FROM objets");
             OutilsJDBC.afficherResultSet(resultat1);
             OutilsJDBC.afficherResultSet(resultat2);
             OutilsJDBC.afficherResultSet(resultat3);
-            /**
-            statement.executeUpdate("DELETE FROM pokemons;");
             
-            statement.executeUpdate("INSERT INTO pokemons (id, espece, latitude, longitude, visible, creation, proprietaire) "
-                    + "VALUES (0, 'pikachu', 47.249983, 5.995654, 1, NOW(), 'sacha')");
-            
-            statement.executeUpdate("INSERT INTO pokemons (id, espece, latitude, longitude, visible, creation, proprietaire) "
-                    + "VALUES (0, 'miaouss', 47.251631, 5.992150, 1, NOW(), 'jessie')");
-            
-            statement.executeUpdate("INSERT INTO pokemons (id, espece, latitude, longitude, visible, creation, proprietaire) "
-                    + "VALUES (0, 'evoli', 47.251033, 5.989970, 1, NOW(), 'sauvage')");
-            
-            statement.executeUpdate("INSERT INTO pokemons (id, espece, latitude, longitude, visible, creation, proprietaire) "
-                    + "VALUES (0, 'salameche', 47.249835, 5.991402, 1, NOW(), 'sauvage')");
-            
-            statement.executeUpdate("INSERT INTO pokemons (id, espece, latitude, longitude, visible, creation, proprietaire) "
-                    + "VALUES (0, 'carapuce', 47.249598, 5.989169, 1, NOW(), 'sauvage')");
-            
-            statement.executeUpdate("INSERT INTO pokemons (id, espece, latitude, longitude, visible, creation, proprietaire) "
-                    + "VALUES (0, 'tiplouf', 47.250496, 5.991135, 1, NOW(), 'sauvage')");
-            
-            statement.executeUpdate("INSERT INTO pokemons (id, espece, latitude, longitude, visible, creation, proprietaire) "
-                    + "VALUES (0, 'carapuce', 47.250972, 5.996097, 1, NOW(), 'sauvage')");
-            
-            statement.executeUpdate("INSERT INTO pokemons (id, espece, latitude, longitude, visible, creation, proprietaire) "
-                    + "VALUES (0, 'ronflex', 47.250461, 5.993067, 1, NOW(), 'sauvage')");
-            
-            statement.executeUpdate("INSERT INTO pokemons (id, espece, latitude, longitude, visible, creation, proprietaire) "
-                    + "VALUES (0, 'evoli', 47.249431, 5.994519, 1, NOW(), 'sacha')");
-            
-            resultat = statement.executeQuery("SELECT *");           
-            OutilsJDBC.afficherResultSet(resultat);
-            **/
           
             statement.close();
             connexion.close();

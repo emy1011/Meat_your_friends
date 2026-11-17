@@ -4,8 +4,10 @@
  */
 package meat_your_friends;
 
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,13 +19,32 @@ import javax.swing.Timer;
  */
 public class Interface extends javax.swing.JFrame {
     
+    // private Map map; il faudra là mettre celle de rico
+    private Graphics2D contexte;
+    private Jeu jeu;
+    private Timer timer;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Interface.class.getName());
 
     /**
      * Creates new form Interface
      */
     public Interface() {
+        
         initComponents();
+        this.jeu = new Jeu();
+        this.timer = new Timer(1000, this);
+        this.timer.start();
+    }
+    
+       // Methode appelee par le timer et qui effectue la boucle de jeu
+    public void actionPerformed(ActionEvent e) {
+        this.jeu.miseAJour();
+        this.jeu.rendu(contexte);
+        this.jLabel1.repaint();
+        if (this.jeu.estTermine()) {
+            this.timer.stop();
+        }
     }
 
     /**
@@ -63,6 +84,9 @@ public class Interface extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(316, 316, 316)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(207, 207, 207)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -72,11 +96,8 @@ public class Interface extends javax.swing.JFrame {
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(368, 368, 368)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(258, 258, 258)
-                        .addComponent(jLabel1)))
-                .addContainerGap(328, Short.MAX_VALUE))
+                        .addComponent(jButton1)))
+                .addContainerGap(327, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,11 +125,11 @@ public class Interface extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
             try {
-                
+                // 1. Connexion à la base de données (ou utilisation de SingletonJDBC si vous l'avez mis en place)
                 Connection connexion = DriverManager.getConnection("jdbc:mariadb://nemrod.ens2m.fr:3306/2026-2027_s1_vs1_tp2_meat_your_friends", "etudiant", "YTDTvj9TR3CDYCmP");
 
-                
-                PreparedStatement requete = connexion.prepareStatement("SELECT COUNT(*) FROM Joueurs WHERE pseudo = ?");
+                // 2. Préparation de la requête avec COUNT(*) (correction des parenthèses)
+                PreparedStatement requete = connexion.prepareStatement("SELECT COUNT(*) FROM joueurs WHERE pseudo = ?");
                 String pseudo = jTextField1.getText();
                 requete.setString(1, pseudo);
                 ResultSet resultat = requete.executeQuery();
@@ -118,10 +139,7 @@ public class Interface extends javax.swing.JFrame {
                     int nombre = resultat.getInt(1);
 
                     if (nombre == 0) {
-                        System.out.println("Création d'un nouveau profil");
-                        SalleAttente salleAttente = new SalleAttente(pseudo);
-                        salleAttente.setVisible(true);
-                        this.dispose();
+                        System.out.println("Pas dans la base de donnée");
                         
                     } else {
 
