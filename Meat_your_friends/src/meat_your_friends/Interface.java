@@ -13,6 +13,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.Timer;
+import AvatarEtItem.Jeu;
 /**
  *
  * @author abaglin
@@ -33,7 +34,7 @@ public class Interface extends javax.swing.JFrame {
         
         initComponents();
         this.jeu = new Jeu();
-        this.timer = new Timer(1000, this);
+        //this.timer = new Timer(1000, this);
         this.timer.start();
     }
     

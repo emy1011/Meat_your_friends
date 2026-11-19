@@ -22,13 +22,16 @@ public class FenetreDeJeuProjet extends JFrame {
     private BufferedImage framebuffer;
     private Graphics2D contexte;
     private JLabel jLabel1;
+    public int LATITUDE_MAX ;
+public int LONGITUDE_MAX ;
+   
 
     private Jeu jeu;
     private CarteColision colisions;
 
     public FenetreDeJeuProjet() {
 
-        this.setTitle("Mon jeu - TileMapping");
+        this.setTitle("Meat your friends - TileMapping");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
 
@@ -36,11 +39,11 @@ public class FenetreDeJeuProjet extends JFrame {
         jeu = new Jeu();
         colisions = new CarteColision(jeu.getCarte());
 
-        int largeurPx = jeu.getCarte().getLargeur() * Map.TAILLE_TUILE;
-        int hauteurPx = jeu.getCarte().getHauteur() * Map.TAILLE_TUILE;
+        LONGITUDE_MAX = jeu.getCarte().getLargeur() * Map.TAILLE_TUILE;
+        LATITUDE_MAX = jeu.getCarte().getHauteur() * Map.TAILLE_TUILE;
 
         framebuffer = new BufferedImage(
-            largeurPx, hauteurPx, BufferedImage.TYPE_INT_ARGB
+            LONGITUDE_MAX , LATITUDE_MAX, BufferedImage.TYPE_INT_ARGB
         );
 
         contexte = framebuffer.createGraphics();
@@ -61,12 +64,12 @@ public class FenetreDeJeuProjet extends JFrame {
         int margeW = 20;
         int margeH = 60;
 
-        double echelleW = (ecran.width - margeW) / (double) largeurPx;
-        double echelleH = (ecran.height - margeH) / (double) hauteurPx;
+        double echelleW = (ecran.width - margeW) / (double) LONGITUDE_MAX;
+        double echelleH = (ecran.height - margeH) / (double) LATITUDE_MAX;
         double echelle = Math.min(ECHELLE_MAX, Math.min(echelleW, echelleH));
 
-        int largeurEcran = (int) (largeurPx * echelle);
-        int hauteurEcran = (int) (hauteurPx * echelle);
+        int largeurEcran = (int) (LONGITUDE_MAX * echelle);
+        int hauteurEcran = (int) (LATITUDE_MAX * echelle);
 
         BufferedImage agrandie = new BufferedImage(
             largeurEcran, hauteurEcran, BufferedImage.TYPE_INT_ARGB
@@ -91,4 +94,6 @@ public class FenetreDeJeuProjet extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
+    
+    
 }

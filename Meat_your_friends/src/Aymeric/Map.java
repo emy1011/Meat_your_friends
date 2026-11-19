@@ -14,6 +14,7 @@ public class Map {
     public static final int TAILLE_TUILE = 32;   // doit correspondre au fichier (32 32)
     private static final String FICHIER_NIVEAU = "/resources/texte_map.txt";
 
+
     private final Niveau niveau = new Niveau(FICHIER_NIVEAU);
     private BufferedImage tileset;
     private int colonnesTileset;

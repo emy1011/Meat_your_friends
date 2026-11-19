@@ -36,7 +36,7 @@ public class Jeu {
         }
         this.score = 0;
         this.uneCarotte = new Carotte();
-        this.av = new Avatar("blabla");
+        this.av = new Avatar();
         this.uneVache = new Vache();
         this.unOurs=new Ours();
         this.unChampi= new Champi();
