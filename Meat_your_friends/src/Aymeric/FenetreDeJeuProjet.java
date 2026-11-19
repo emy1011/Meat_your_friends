@@ -2,6 +2,8 @@ package Aymeric;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
@@ -11,34 +13,31 @@ import javax.swing.SwingConstants;
 
 public class FenetreDeJeuProjet extends JFrame {
 
-    // Passe à false pour masquer les collisions (version finale)
+    // Passe a true pour voir les collisions en rouge
     private static final boolean DEBUG_COLLISIONS = false;
-//    private static final boolean DEBUG_COLLISIONS = false;
 
-    // Facteur d'agrandissement de l'affichage (1.5 = 50 % plus grand)
-    private static final double ECHELLE = 1.5;
+    // Zoom maximal autorise (1.0 = taille native, 1.5 = comme avant)
+    private static final double ECHELLE_MAX = 1.5;
 
     private BufferedImage framebuffer;
     private Graphics2D contexte;
     private JLabel jLabel1;
 
-    private Map carte_1;
+    private Jeu jeu;
     private CarteColision colisions;
 
     public FenetreDeJeuProjet() {
 
-        // Initialisation de la fenêtre
         this.setTitle("Mon jeu - TileMapping");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
 
-        // Création des deux couches
-        carte_1 = new Map();                 // couche visuelle
-        colisions = new CarteColision();   // couche de collision
+        // La carte d'abord : les dimensions viennent du fichier de niveau
+        jeu = new Jeu();
+        colisions = new CarteColision(jeu.getCarte());
 
-        // Taille du framebuffer calculée à partir des constantes
-        int largeurPx = CarteColision.LARGEUR * CarteColision.TAILLE_TUILE;
-        int hauteurPx = CarteColision.HAUTEUR * CarteColision.TAILLE_TUILE;
+        int largeurPx = jeu.getCarte().getLargeur() * Map.TAILLE_TUILE;
+        int hauteurPx = jeu.getCarte().getHauteur() * Map.TAILLE_TUILE;
 
         framebuffer = new BufferedImage(
             largeurPx, hauteurPx, BufferedImage.TYPE_INT_ARGB
@@ -46,28 +45,36 @@ public class FenetreDeJeuProjet extends JFrame {
 
         contexte = framebuffer.createGraphics();
 
-        // 1) La map visuelle
-        carte_1.rendu(contexte);
+        jeu.rendu(contexte);
 
-        // 2) Les collisions en rouge (debug)
         if (DEBUG_COLLISIONS) {
             colisions.rendu(contexte);
         }
 
         contexte.dispose();
 
-        // Taille affichée à l'écran (agrandissement)
-        int largeurEcran = (int) (largeurPx * ECHELLE);
-        int hauteurEcran = (int) (hauteurPx * ECHELLE);
+        // Zone utilisable de l'ecran (hors barre des taches)
+        Rectangle ecran = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .getMaximumWindowBounds();
 
-        // Image agrandie, sans lissage pour garder un rendu net
+        // Marge pour la barre de titre et les bordures de la fenetre
+        int margeW = 20;
+        int margeH = 60;
+
+        double echelleW = (ecran.width - margeW) / (double) largeurPx;
+        double echelleH = (ecran.height - margeH) / (double) hauteurPx;
+        double echelle = Math.min(ECHELLE_MAX, Math.min(echelleW, echelleH));
+
+        int largeurEcran = (int) (largeurPx * echelle);
+        int hauteurEcran = (int) (hauteurPx * echelle);
+
         BufferedImage agrandie = new BufferedImage(
             largeurEcran, hauteurEcran, BufferedImage.TYPE_INT_ARGB
         );
         Graphics2D g2 = agrandie.createGraphics();
         g2.setRenderingHint(
             RenderingHints.KEY_INTERPOLATION,
-            RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+            RenderingHints.VALUE_INTERPOLATION_BILINEAR
         );
         g2.drawImage(framebuffer, 0, 0, largeurEcran, hauteurEcran, null);
         g2.dispose();
