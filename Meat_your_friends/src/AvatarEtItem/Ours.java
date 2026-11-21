@@ -55,7 +55,7 @@ public class Ours extends Animal {
         }
 
         if (av.estMort()) {
-            deplacementAnimal();
+            deplacementAnimal(av);
             return;
         }
 
@@ -82,7 +82,7 @@ public class Ours extends Animal {
             }
         } else {
             // Déplacement aléatoire (utilise la méthode de la classe mère avec des limites personnalisées si besoin)
-            deplacementAnimal();
+            deplacementAnimal(av);
         }
     }
 }

@@ -21,6 +21,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener {
     private Jeu jeu;
     private Timer timer;
     private JLabel jLabel1;
+    
 
     public FenetreDeJeu() {
         // initialisation de la fenetre

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.Timer;
+import AvatarEtItem.Jeu;
 
 /**
  * Exemple de fenetre de jeu en utilisant l'éditeur d'interface de NetBeans

@@ -1,82 +1,69 @@
-
 package Aymeric;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.File;
+import java.io.InputStream;
 import javax.imageio.ImageIO;
 
+
 public class Map {
+    
+    
 
-    private int largeur = 20;
-    private int hauteur = 20;
-    private int tailleTuile = 32;
+    public static final int TAILLE_TUILE = 32;   // doit correspondre au fichier (32 32)
+    private static final String FICHIER_NIVEAU = "/resources/texte_map.txt";
 
-    private BufferedImage[] tuiles;
 
-    // Matrice représentant les 20 lignes et les 20 colonnes de la carte
-    private int[][] decor = new int[hauteur][largeur];
+    private final Niveau niveau = new Niveau(FICHIER_NIVEAU);
+    private BufferedImage tileset;
+    private int colonnesTileset;
 
     public Map() {
-        try {
-            // Chargement de l'image complète
-            BufferedImage tileset = ImageIO.read(
-                getClass().getResource("resources/map.png")
-            );
+        if (niveau.getTailleTuileW() != TAILLE_TUILE || niveau.getTailleTuileH() != TAILLE_TUILE) {
+            throw new IllegalStateException("TAILLE_TUILE (" + TAILLE_TUILE
+                    + ") ne correspond pas au fichier");
+        }
+        chargerTileset();
+        colonnesTileset = tileset.getWidth() / TAILLE_TUILE;
+    }
 
-            // Calcul du nombre de tuiles dans l'image
-            int colonnes = tileset.getWidth() / tailleTuile;
-            int lignes = tileset.getHeight() / tailleTuile;
-
-            // Création du tableau contenant les 400 tuiles
-            tuiles = new BufferedImage[colonnes * lignes];
-
-            // Découpage de l'image en tuiles de 32 x 32 pixels
-            for (int i = 0; i < tuiles.length; i++) {
-
-                int x = (i % colonnes) * tailleTuile;
-                int y = (i / colonnes) * tailleTuile;
-
-                tuiles[i] = tileset.getSubimage(
-                    x, y, tailleTuile, tailleTuile
-                );
+    /** Cherche d'abord /resources/tileset.png, sinon le chemin écrit dans le fichier. */
+    private void chargerTileset() {
+        try (InputStream in = Map.class.getResourceAsStream("/resources/tileset.png")) {
+            if (in != null) {
+                tileset = ImageIO.read(in);
+                return;
             }
-
-            // Remplissage de la matrice avec les indices des tuiles
-            for (int y = 0; y < hauteur; y++) {
-                for (int x = 0; x < largeur; x++) {
-                    decor[y][x] = y * largeur + x;
-                }
-            }
-
-        } catch (IOException | IllegalArgumentException ex) {
-            Logger.getLogger(Map.class.getName())
-                  .log(Level.SEVERE, "Erreur de chargement de la carte", ex);
+            tileset = ImageIO.read(new File(niveau.getCheminTileset()));
+        } catch (Exception e) {
+            throw new RuntimeException("Tileset introuvable (ni /resources/tileset.png, ni "
+                    + niveau.getCheminTileset() + ")", e);
         }
     }
 
-    public void miseAJour() {
+    public Niveau getNiveau() { return niveau; }
+    public int getLargeur()   { return niveau.getLargeur(); }
+    public int getHauteur()   { return niveau.getHauteur(); }
 
+    /** Dessine le sol puis le décor. Le calque de collision n'est pas dessiné. */
+    public void rendu(Graphics2D g) {
+        dessinerCalque(g, Niveau.CALQUE_SOL);
+        dessinerCalque(g, Niveau.CALQUE_DECOR);
     }
 
-    public void rendu(Graphics2D contexte) {
-    if (tuiles == null) return; // chargement raté
-
-    for (int y = 0; y < hauteur; y++) {
-        for (int x = 0; x < largeur; x++) {
-            int numeroTuile = decor[y][x];
-
-            if (numeroTuile >= 0 && numeroTuile < tuiles.length) {
-                contexte.drawImage(
-                    tuiles[numeroTuile],
-                    x * tailleTuile,
-                    y * tailleTuile,
-                    null
-                );
+    private void dessinerCalque(Graphics2D g, int calque) {
+        for (int l = 0; l < getHauteur(); l++) {
+            for (int c = 0; c < getLargeur(); c++) {
+                int id = niveau.get(calque, l, c);
+                if (id < 0) continue;   // case vide
+                int sx = (id % colonnesTileset) * TAILLE_TUILE;
+                int sy = (id / colonnesTileset) * TAILLE_TUILE;
+                g.drawImage(tileset,
+                        c * TAILLE_TUILE, l * TAILLE_TUILE,
+                        (c + 1) * TAILLE_TUILE, (l + 1) * TAILLE_TUILE,
+                        sx, sy, sx + TAILLE_TUILE, sy + TAILLE_TUILE, null);
             }
         }
-    }
     }
 }

@@ -9,15 +9,17 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import outils.SingletonJDBC;
+import Aymeric.FenetreDeJeuProjet;
 
 /**
- * Exemple de classe lutin
+ *
  *
  * @author manon.lemestre
  */
@@ -30,9 +32,18 @@ public class Avatar {
     private int vie = 300;
     private boolean mort = false;
     private int delaiRespawn = 0;
-    //private Map map;
+    private FenetreDeJeuProjet map;
+    private String nom;
+    private boolean positionModifiee = false;
+private long derniereSync = 0;
+private static final long DELAI_SYNC_MS = 200;
+
+
+    private Connection connexion; //état de connexion
 
     public Avatar() {
+        
+        this.connexion = SingletonJDBC.getInstance().getConnection();
         try {
             this.sprite = ImageIO.read(getClass().getResource("../resources/cuisto.png"));
         } catch (IOException ex) {
@@ -45,9 +56,11 @@ public class Avatar {
         this.toucheBas = false;
         this.toucheHaut = false;
         this.inventaire = new Inventaire();
+        this.nom = nom;
+        this.map=map;
     }
 
-    public void miseAJour() {
+    public void miseAJour(Jeu jeu) {
 
         if (mort) {
             miseAJourRespawn();
@@ -55,11 +68,11 @@ public class Avatar {
         }
 
         if (toucheGauche) {
-            x -= 5;
+            deplacerGauche(jeu);
         }
 
         if (toucheDroite) {
-            x += 5;
+            deplacerDroite(jeu);
         }
 
         if (x > 960 - sprite.getWidth()) {
@@ -71,11 +84,11 @@ public class Avatar {
         }
 
         if (toucheBas) {
-            y += 5;
+            deplacerBas(jeu);
         }
 
         if (toucheHaut) {
-            y -= 5;
+            deplacerHaut(jeu);
         }
 
         if (y > 960 - sprite.getHeight()) {
@@ -84,6 +97,42 @@ public class Avatar {
 
         if (y < 0) {
             y = 0;
+        }
+        
+        
+        long maintenant = System.currentTimeMillis();
+        
+if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
+    positionModifiee = false;
+    derniereSync = maintenant;
+}
+    }
+
+    public void deplacerDroite(Jeu jeu) {
+        x += 5;
+        if (jeu.collisionAnimal()) {
+            x -= 5;
+        }
+    }
+
+    public void deplacerGauche(Jeu jeu) {
+        x -= 5;
+        if (jeu.collisionAnimal()) {
+            x += 5;
+        }
+    }
+
+    public void deplacerHaut(Jeu jeu) {
+        y -= 5;
+        if (jeu.collisionAnimal()) {
+            y += 5;
+        }
+    }
+
+    public void deplacerBas(Jeu jeu) {
+        y += 5;
+        if (jeu.collisionAnimal()) {
+            y -= 5;
         }
     }
 
@@ -136,11 +185,13 @@ public class Avatar {
     }
 
     public double getLargeur() {
-        return sprite.getHeight();
+        return sprite.getWidth();
+        
     }
 
     public double getHauteur() {
-        return sprite.getWidth();
+        return sprite.getHeight();
+        
     }
 
     public void recevoirDegats(int degats) {
@@ -159,6 +210,13 @@ public class Avatar {
         }
     }
 
+    public boolean collision(Animal an) {
+        return an.getX() < x + getLargeur()
+                && an.getX() + an.getLargeur() > x
+                && an.getY() < y + getHauteur()
+                && an.getY() + an.getHauteur() > y;
+    }
+
     public void perdreInventaire() {
         inventaire.vider();
     }
@@ -166,33 +224,32 @@ public class Avatar {
     public boolean estMort() {
         return mort;
     }
-    
 
-    //private void deplacer(String pseudo,double dLat, double dLon) {
-    //    try {
-    //        Connection connexion = SingletonJDBC.getInstance().getConnection();
-    //        PreparedStatement requete = connexion.prepareStatement(
-    //                "UPDATE dresseurs SET "
-    //                + "latitude = LEAST(?, GREATEST(?, latitude + ?)), "
-    //                + "longitude = LEAST(?, GREATEST(?, longitude + ?)) "
-    //                + "WHERE pseudo = ?");
-    //        requete.setDouble(1, map.LATITUDE_MAX);
-    //        requete.setDouble(2, map.LATITUDE_MIN);
-    //        requete.setDouble(3, dLat);
-    //        requete.setDouble(4, map.LONGITUDE_MAX);
-    //        requete.setDouble(5, map.LONGITUDE_MIN);
-    //        requete.setDouble(6, dLon);
-    //        requete.setString(7, pseudo);
-    //        requete.executeUpdate();
-    //        requete.close();
-    //    } catch (SQLException ex) {
-    //        ex.printStackTrace();
-    //    }
-    //}
+    private void deplacer(String pseudo, double dLat, double dLon) {
+        try {
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+            PreparedStatement requete = connexion.prepareStatement(
+                    "UPDATE dresseurs SET "
+                    + "latitude = LEAST(?, GREATEST(?, latitude + ?)), "
+                    + "longitude = LEAST(?, GREATEST(?, longitude + ?)) "
+                    + "WHERE pseudo = ?");
+            requete.setDouble(1, map.LATITUDE_MAX);
+            requete.setDouble(2, 0);
+            requete.setDouble(3, dLat);
+            requete.setDouble(4, map.LONGITUDE_MAX);
+            requete.setDouble(5, 0);
+            requete.setDouble(6, dLon);
+            requete.setString(7, pseudo);
+            requete.executeUpdate();
+            requete.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
     
     private void CreationJoueur(String pseudo) {
         try {
-            Connection connexion = SingletonJDBC.getInstance().getConnection();
+            //Connection connexion = SingletonJDBC.getInstance().getConnection();
             PreparedStatement requete = connexion.prepareStatement("INSERT INTO Joueurs VALUES (?, ?, ?, NOW(),0)");
             
             requete.setString(1, pseudo);
@@ -205,5 +262,14 @@ public class Avatar {
         }
     }
     
+     public void closeTable(){
+        try {
+            this.connexion.close();
 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+    
 }
