@@ -13,61 +13,69 @@ import AvatarEtItem.Jeu;
  *
  * @author guillaume.laurent
  */
-public class SalleAttente extends javax.swing.JFrame implements ActionListener {
+public class LancementJeu extends javax.swing.JFrame implements ActionListener {
 
     private BufferedImage framebuffer;
     private Graphics2D contexte;
     private Jeu jeu;
     private Timer timer;
     private String pseudo;
+    private PanneauJeu panneauJeu;
 
     /**
      * Creates new form NewJFrame
      */
-    public SalleAttente(String pseudo) {
+    public LancementJeu(String pseudo) {
 
-   
-    initComponents();
+        initComponents();
 
-    jTextField1.setText(pseudo);
+        jTextField1.setText(pseudo);
+        jTextField1.setEditable(false);
 
-    this.pseudo = pseudo;
-    this.jeu = new Jeu();
-    this.framebuffer = new BufferedImage(jPanel1.getWidth(),jPanel1.getHeight(), BufferedImage.TYPE_INT_ARGB);
-    this.contexte = framebuffer.createGraphics();
-    this.timer = new Timer(16, this);
-    this.timer.start();
-}
-    
+        this.pseudo = pseudo;
+        this.jeu = new Jeu();
+        this.framebuffer = new BufferedImage(jPanel1.getWidth(), jPanel1.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        this.contexte = framebuffer.createGraphics();
+        this.panneauJeu = new PanneauJeu();
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.removeAll();
+        jPanel1.add(this.panneauJeu, java.awt.BorderLayout.CENTER);
+        jPanel1.revalidate();
+        jPanel1.repaint();
+        jTextField1.setFocusable(false);
+        setFocusable(true);
+        requestFocusInWindow();
+        this.timer = new Timer(16, this);
+        this.timer.start();
+    }
 
     // Methode appelee par le timer et qui effectue la boucle de jeu
-
     @Override
-public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {
 
-    // Mise à jour du jeu
-    this.jeu.miseAJour();
+        // Mise à jour du jeu
+        this.jeu.miseAJour();
 
-    // Effacer l'image précédente
-    this.contexte.clearRect(
-        0,
-        0,
-        framebuffer.getWidth(),
-        framebuffer.getHeight()
-    );
+        // Effacer l'image précédente
+        this.contexte.clearRect(
+                0,
+                0,
+                framebuffer.getWidth(),
+                framebuffer.getHeight()
+        );
 
-    // Dessiner le jeu
-    this.jeu.rendu(contexte);
+        // Dessiner le jeu
+        this.jeu.rendu(contexte);
 
-    // Actualiser le JPanel
-    this.jPanel1.repaint();
+        if (this.panneauJeu != null) {
+            this.panneauJeu.repaint();
+        }
 
-    // Vérifier si le jeu est terminé
-    if (this.jeu.estTermine()) {
-        this.timer.stop();
+        // Vérifier si le jeu est terminé
+        if (this.jeu.estTermine()) {
+            this.timer.stop();
+        }
     }
-}
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -102,11 +110,11 @@ public void actionPerformed(ActionEvent e) {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 742, Short.MAX_VALUE)
+            .addGap(0, 1007, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 531, Short.MAX_VALUE)
+            .addGap(0, 645, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -114,20 +122,20 @@ public void actionPerformed(ActionEvent e) {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(920, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(676, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(321, 321, 321))
+                .addGap(0, 194, Short.MAX_VALUE))
         );
 
         pack();
@@ -149,7 +157,18 @@ public void actionPerformed(ActionEvent e) {
     }//GEN-LAST:event_formKeyPressed
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
-
+        if (evt.getKeyCode() == evt.VK_UP) {
+            this.jeu.getAvatar().setToucheHaut(false);
+        }
+        if (evt.getKeyCode() == evt.VK_DOWN) {
+            this.jeu.getAvatar().setToucheBas(false);
+        }
+        if (evt.getKeyCode() == evt.VK_RIGHT) {
+            this.jeu.getAvatar().setToucheDroite(false);
+        }
+        if (evt.getKeyCode() == evt.VK_LEFT) {
+            this.jeu.getAvatar().setToucheGauche(false);
+        }
     }//GEN-LAST:event_formKeyReleased
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -173,14 +192,78 @@ public void actionPerformed(ActionEvent e) {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LancementJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LancementJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LancementJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LancementJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -249,7 +332,7 @@ public void actionPerformed(ActionEvent e) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SalleAttente("TestPseudo").setVisible(true);
+                new LancementJeu("TestPseudo").setVisible(true);
 
             }
         });
@@ -259,5 +342,14 @@ public void actionPerformed(ActionEvent e) {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+private class PanneauJeu extends javax.swing.JPanel {
 
+        @Override
+        protected void paintComponent(java.awt.Graphics g) {
+            super.paintComponent(g);
+            if (framebuffer != null) {
+                g.drawImage(framebuffer, 0, 0, null);
+            }
+        }
+    }
 }

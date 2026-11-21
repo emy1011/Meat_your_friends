@@ -247,9 +247,9 @@ if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
         }
     }
     
-    private void CreationJoueur(String pseudo) {
+    public static void CreationJoueur(String pseudo) {
         try {
-            //Connection connexion = SingletonJDBC.getInstance().getConnection();
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
             PreparedStatement requete = connexion.prepareStatement("INSERT INTO Joueurs VALUES (?, ?, ?, NOW(),0)");
             
             requete.setString(1, pseudo);
@@ -261,7 +261,29 @@ if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
             ex.printStackTrace();
         }
     }
-    
+    public static void viderJoueurs() {
+    Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+    try (PreparedStatement requete = connexion.prepareStatement("DELETE FROM Joueurs")) {
+        requete.executeUpdate();
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+}
+    public static void supprimerJoueur(String pseudo) {
+    if (pseudo == null || pseudo.trim().isEmpty()) {
+        return;
+    }
+    String sql = "DELETE FROM Joueurs WHERE pseudo = ?";
+    Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+    try (PreparedStatement requete = connexion.prepareStatement(sql)) {
+        requete.setString(1, pseudo.trim());
+        requete.executeUpdate();
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+}
      public void closeTable(){
         try {
             this.connexion.close();
