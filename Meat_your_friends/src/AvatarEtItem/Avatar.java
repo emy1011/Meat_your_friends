@@ -229,7 +229,7 @@ if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
         try {
             Connection connexion = SingletonJDBC.getInstance().getConnection();
             PreparedStatement requete = connexion.prepareStatement(
-                    "UPDATE dresseurs SET "
+                    "UPDATE Joueurs SET "
                     + "latitude = LEAST(?, GREATEST(?, latitude + ?)), "
                     + "longitude = LEAST(?, GREATEST(?, longitude + ?)) "
                     + "WHERE pseudo = ?");
