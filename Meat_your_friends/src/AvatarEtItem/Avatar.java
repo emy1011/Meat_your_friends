@@ -55,6 +55,7 @@ public class Avatar {
         this.toucheBas = false;
         this.toucheHaut = false;
         this.inventaire = new Inventaire();
+<<<<<<< HEAD
         this.nom = nom;
         this.map = map;
 
@@ -80,6 +81,11 @@ public class Avatar {
         }
 
         return false;
+=======
+        
+        
+        
+>>>>>>> 4da714fcbb07e674c014e5e1964b14fce511c1ec
     }
 
     private void essayerDeplacer(Jeu jeu, double dx, double dy) {

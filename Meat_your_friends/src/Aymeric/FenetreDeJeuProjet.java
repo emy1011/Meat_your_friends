@@ -22,8 +22,8 @@ public class FenetreDeJeuProjet extends JFrame {
     private BufferedImage framebuffer;
     private Graphics2D contexte;
     private JLabel jLabel1;
-    public int LATITUDE_MAX ;
-public int LONGITUDE_MAX ;
+    public int LATITUDE_MAX = 1100;
+public int LONGITUDE_MAX = 1300 ;
    
 
     private Jeu jeu;
@@ -93,6 +93,14 @@ public int LONGITUDE_MAX ;
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    public int getLATITUDE_MAX() {
+        return LATITUDE_MAX;
+    }
+
+    public int getLONGITUDE_MAX() {
+        return LONGITUDE_MAX;
     }
     
     
