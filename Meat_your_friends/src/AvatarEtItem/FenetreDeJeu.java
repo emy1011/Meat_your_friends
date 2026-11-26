@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.Timer;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import Aymeric.FenetreDeJeuProjet;
 
 /**
  *
@@ -24,6 +25,8 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener,
     private JLabel jLabel1;
     private Jeu jeu;
     private Timer timer;
+    private FenetreDeJeuProjet map;
+    
 
     public FenetreDeJeu() {
 // initialisation de la fenetre
