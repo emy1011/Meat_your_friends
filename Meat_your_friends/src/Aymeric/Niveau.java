@@ -20,6 +20,7 @@ public class Niveau {
     private int[][][] calques;             // calques[calque][ligne][colonne]
 
     public Niveau(String cheminRessource) {
+        
         try (InputStream in = Niveau.class.getResourceAsStream(cheminRessource)) {
             if (in == null) {
                 throw new IllegalStateException("Fichier introuvable : " + cheminRessource);
@@ -45,7 +46,7 @@ public class Niveau {
                     }
                     if (ligne == null) {
                         throw new IllegalStateException(
-                                "Fichier trop court (calque " + c + ", ligne " + l + ")");
+                                "Fichier trop court (calque " + c + ", ligne " + l + ")" + cheminRessource);
                     }
                     String[] v = ligne.trim().split("\\s+");
                     if (v.length != largeur) {
