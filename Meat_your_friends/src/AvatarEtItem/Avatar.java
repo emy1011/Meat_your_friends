@@ -39,6 +39,7 @@ private long derniereSync = 0;
 private static final long DELAI_SYNC_MS = 200;
 
 
+
     private Connection connexion; //état de connexion
 
     public Avatar() {
@@ -58,6 +59,7 @@ private static final long DELAI_SYNC_MS = 200;
         this.inventaire = new Inventaire();
         this.nom = nom;
         this.map=map;
+        
     }
 
     public void miseAJour(Jeu jeu) {

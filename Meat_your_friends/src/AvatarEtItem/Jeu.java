@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import java.awt.event.MouseEvent;
 import Aymeric.Map;
+import Aymeric.CarteColision;
 
 /**
  *
@@ -20,7 +21,7 @@ import Aymeric.Map;
 public class Jeu {
 
     private Map carte;
-    ;
+    private CarteColision colisions;
     private int score;
     private Carotte uneCarotte;
     private Avatar av;
@@ -45,7 +46,16 @@ public class Jeu {
         this.unChampi = new Champi();
         this.uneTomate = new Tomate();
         this.unLapin = new Lapin();
+        this.colisions = new CarteColision(this.carte);
 
+    }
+
+    public Map getCarte() {
+        return carte;
+    }
+
+    public CarteColision getColisions() {
+        return colisions;
     }
 
     public void clicSouris(MouseEvent e) {
@@ -97,8 +107,6 @@ public class Jeu {
         return av;
     }
 
-    public Map getCarte() {
-        return carte;
-    }
+   
 
 }
