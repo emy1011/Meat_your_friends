@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import java.awt.event.MouseEvent;
+import Aymeric.Map;
+import Aymeric.CarteColision;
 
 /**
  *
@@ -18,40 +20,53 @@ import java.awt.event.MouseEvent;
  */
 public class Jeu {
 
-    private BufferedImage decor;
+    private Map carte;
+    private CarteColision colisions;
     private int score;
     private Carotte uneCarotte;
     private Avatar av;
     private Vache uneVache;
     private Ours unOurs;
     private Champi unChampi;
-    private Tomate uneTomate; 
-    private Lapin unLapin; 
+    private Tomate uneTomate;
+    private Lapin unLapin;
 
     public Jeu() {
-        try {
-            this.decor = ImageIO.read(getClass().getResource("../resources/ferme.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Jeu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            this.decor = ImageIO.read(getClass().getResource("../resources/ferme.png"));
+//        } catch (IOException ex) {
+//            Logger.getLogger(Jeu.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        this.carte = new Map();
         this.score = 0;
         this.uneCarotte = new Carotte();
         this.av = new Avatar();
         this.uneVache = new Vache();
-        this.unOurs=new Ours();
-        this.unChampi= new Champi();
-        this.uneTomate = new Tomate (); 
+        this.unOurs = new Ours();
+        this.unChampi = new Champi();
+        this.uneTomate = new Tomate();
         this.unLapin = new Lapin();
+        this.colisions = new CarteColision(this.carte);
+
+    }
+
+    public Map getCarte() {
+        return carte;
+    }
+
+    public CarteColision getColisions() {
+        return colisions;
     }
 
     public void clicSouris(MouseEvent e) {
         uneVache.attaquer(av, e.getX(), e.getY());
         unOurs.attaquer(av, e.getX(), e.getY());
-        unLapin.attaquer(av,e.getX(),e.getY());
+        unLapin.attaquer(av, e.getX(), e.getY());
     }
-    
+
     public void rendu(Graphics2D contexte) {
-        contexte.drawImage(this.decor, 0, 0, null);
+//        contexte.drawImage(this.decor, 0, 0, null);
+        this.carte.rendu(contexte);
         contexte.drawString("Score : " + score, 10, 20);
         this.uneCarotte.rendu(contexte);
         this.uneVache.rendu(contexte);
@@ -66,12 +81,13 @@ public class Jeu {
                 960
         );
     }
+
     public boolean collisionAnimal() {
-    return av.collision(uneVache)
-            || av.collision(unOurs)
-            || av.collision(unLapin);
-}
- 
+        return av.collision(uneVache)
+                || av.collision(unOurs)
+                || av.collision(unLapin);
+    }
+
     public void miseAJour() {
         this.uneCarotte.miseAJour(this.av);
         this.uneVache.miseAJour(this.av);
@@ -94,5 +110,7 @@ public class Jeu {
     public Avatar getAvatar() {
         return av;
     }
+
+   
 
 }

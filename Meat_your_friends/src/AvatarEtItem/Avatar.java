@@ -39,6 +39,7 @@ private long derniereSync = 0;
 private static final long DELAI_SYNC_MS = 200;
 
 
+
     private Connection connexion; //état de connexion
 
     public Avatar() {
@@ -58,6 +59,7 @@ private static final long DELAI_SYNC_MS = 200;
         this.inventaire = new Inventaire();
         this.nom = nom;
         this.map=map;
+        
     }
 
     public void miseAJour(Jeu jeu) {
@@ -229,7 +231,7 @@ if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
         try {
             Connection connexion = SingletonJDBC.getInstance().getConnection();
             PreparedStatement requete = connexion.prepareStatement(
-                    "UPDATE dresseurs SET "
+                    "UPDATE Joueurs SET "
                     + "latitude = LEAST(?, GREATEST(?, latitude + ?)), "
                     + "longitude = LEAST(?, GREATEST(?, longitude + ?)) "
                     + "WHERE pseudo = ?");
