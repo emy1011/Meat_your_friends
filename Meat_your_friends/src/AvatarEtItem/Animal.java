@@ -111,6 +111,7 @@ public class Animal {
     public double getY() {
         return y;
     }
+    
 
     public double getLargeur() {
         return sprite.getHeight();
@@ -125,6 +126,8 @@ public class Animal {
                 && av.getY() < y + getHauteur()
                 && av.getY() + av.getHauteur() > y;
  }
+
+
 
     public void attaquer(Avatar av, int sourisX, int sourisY) {
 
