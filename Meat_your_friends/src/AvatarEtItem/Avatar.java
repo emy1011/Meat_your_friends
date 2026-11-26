@@ -57,8 +57,8 @@ private static final long DELAI_SYNC_MS = 200;
         this.toucheBas = false;
         this.toucheHaut = false;
         this.inventaire = new Inventaire();
-        this.nom = nom;
-        this.map=map;
+        
+        
         
     }
 
