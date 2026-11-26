@@ -76,4 +76,5 @@ public class Niveau {
         }
         return calques[calque][ligne][col];
     }
+    
 }

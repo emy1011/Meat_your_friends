@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package AvatarEtItem;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -21,24 +22,28 @@ public class Ours extends Animal {
         this.vitesseDeplacement = 1; // Correspond au + 1 de ton switch
         this.dist = 75;              // Distance d'attaque de l'ours
         this.nom_item = "brin";        // Item lâché à la mort
-        this.xmin=300;
-        this.xmax=600;
-        this.ymin=300;
-        this.ymax=600;
+        this.xmin = 300;
+        this.xmax = 600;
+        this.ymin = 300;
+        this.ymax = 600;
         this.barre_de_vie = this.vie;
 
         try {
-            this.sprite = ImageIO.read(getClass().getResource("../resources/ours.png"));
+            this.sprite = ImageIO.read(getClass().getResource("/resources/ours2.png"));
         } catch (IOException ex) {
             Logger.getLogger(Ours.class.getName()).log(Level.SEVERE, null, ex);
         }
         placer();
+
     }
 
     @Override
     public void placer() {
-        this.x = 300 + Math.random() * 300;
-        this.y = 300 + Math.random() * 300;
+        int colonne = 18;
+        int ligne = 14;
+
+        this.x = colonne * Aymeric.Map.TAILLE_TUILE;
+        this.y = ligne * Aymeric.Map.TAILLE_TUILE;
     }
 
     @Override

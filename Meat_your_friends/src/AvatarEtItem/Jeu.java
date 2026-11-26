@@ -16,7 +16,7 @@ import Aymeric.CarteColision;
 
 /**
  *
- * @author mlemestr
+ * 
  */
 public class Jeu {
 

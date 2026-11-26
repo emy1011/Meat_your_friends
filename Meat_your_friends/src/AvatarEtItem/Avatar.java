@@ -35,15 +35,13 @@ public class Avatar {
     private FenetreDeJeuProjet map;
     private String nom;
     private boolean positionModifiee = false;
-private long derniereSync = 0;
-private static final long DELAI_SYNC_MS = 200;
-
-
+    private long derniereSync = 0;
+    private static final long DELAI_SYNC_MS = 200;
 
     private Connection connexion; //état de connexion
 
     public Avatar() {
-        
+
         this.connexion = SingletonJDBC.getInstance().getConnection();
         try {
             this.sprite = ImageIO.read(getClass().getResource("../resources/cuisto.png"));
@@ -51,17 +49,51 @@ private static final long DELAI_SYNC_MS = 200;
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.x = 170;
-        this.y = 320;
+        this.y = 200;
         this.toucheGauche = false;
         this.toucheDroite = false;
         this.toucheBas = false;
         this.toucheHaut = false;
         this.inventaire = new Inventaire();
         this.nom = nom;
-        this.map=map;
-        
+        this.map = map;
+
+    }
+// cherche les cases avec des hitbox 
+    private boolean collisionCarte(Jeu jeu, double nx, double ny) {
+
+        int taille = Aymeric.Map.TAILLE_TUILE;
+
+        int colMin = (int) (nx / taille);
+        int colMax = (int) ((nx + getLargeur() - 1) / taille);
+
+        int ligneMin = (int) (ny / taille);
+        int ligneMax = (int) ((ny + getHauteur() - 1) / taille);
+
+        for (int ligne = ligneMin; ligne <= ligneMax; ligne++) {
+            for (int col = colMin; col <= colMax; col++) {
+
+                if (jeu.getColisions().estSolide(ligne, col)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
+    private void essayerDeplacer(Jeu jeu, double dx, double dy) {
+
+    double nx = x + dx;
+    double ny = y + dy;
+
+    if (collisionCarte(jeu, nx, ny)) {
+        return;
+    }
+
+    x = nx;
+    y = ny;
+}
     public void miseAJour(Jeu jeu) {
 
         if (mort) {
@@ -77,14 +109,13 @@ private static final long DELAI_SYNC_MS = 200;
             deplacerDroite(jeu);
         }
 
-        if (x > 960 - sprite.getWidth()) {
-            x = 960 - sprite.getWidth();
-        }
-
-        if (x < 0) {
-            x = 0;
-        }
-
+//        if (x > 960 - sprite.getWidth()) {
+//            x = 960 - sprite.getWidth();
+//        }
+//
+//        if (x < 0) {
+//            x = 0;
+//        }
         if (toucheBas) {
             deplacerBas(jeu);
         }
@@ -93,50 +124,69 @@ private static final long DELAI_SYNC_MS = 200;
             deplacerHaut(jeu);
         }
 
-        if (y > 960 - sprite.getHeight()) {
-            y = 960 - sprite.getHeight();
-        }
-
-        if (y < 0) {
-            y = 0;
-        }
-        
-        
+//        if (y > 960 - sprite.getHeight()) {
+//            y = 960 - sprite.getHeight();
+//        }
+//
+//        if (y < 0) {
+//            y = 0;
+//        }
         long maintenant = System.currentTimeMillis();
-        
-if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
-    positionModifiee = false;
-    derniereSync = maintenant;
+        // actualisation des Sync
+        if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
+            positionModifiee = false;
+            derniereSync = maintenant;
+        }
+    }
+    
+    
+    
+    
+    
+
+//    public void deplacerDroite(Jeu jeu) {
+//        x += 5;
+//        if (jeu.collisionAnimal()) {
+//            x -= 5;
+//        }
+//    }
+//
+//    public void deplacerGauche(Jeu jeu) {
+//        x -= 5;
+//        if (jeu.collisionAnimal()) {
+//            x += 5;
+//        }
+//    }
+//
+//    public void deplacerHaut(Jeu jeu) {
+//        y -= 5;
+//        if (jeu.collisionAnimal()) {
+//            y += 5;
+//        }
+//    }
+//
+//    public void deplacerBas(Jeu jeu) {
+//        y += 5;
+//        if (jeu.collisionAnimal()) {
+//            y -= 5;
+//        }
+//    }
+//    
+  public void deplacerDroite(Jeu jeu) {
+    essayerDeplacer(jeu, 5, 0);
 }
-    }
 
-    public void deplacerDroite(Jeu jeu) {
-        x += 5;
-        if (jeu.collisionAnimal()) {
-            x -= 5;
-        }
-    }
+public void deplacerGauche(Jeu jeu) {
+    essayerDeplacer(jeu, -5, 0);
+}
 
-    public void deplacerGauche(Jeu jeu) {
-        x -= 5;
-        if (jeu.collisionAnimal()) {
-            x += 5;
-        }
-    }
+public void deplacerHaut(Jeu jeu) {
+    essayerDeplacer(jeu, 0, -5);
+}
 
-    public void deplacerHaut(Jeu jeu) {
-        y -= 5;
-        if (jeu.collisionAnimal()) {
-            y += 5;
-        }
-    }
-
-    public void deplacerBas(Jeu jeu) {
-        y += 5;
-        if (jeu.collisionAnimal()) {
-            y -= 5;
-        }
-    }
+public void deplacerBas(Jeu jeu) {
+    essayerDeplacer(jeu, 0, 5);
+}
 
     public void miseAJourRespawn() {
 
@@ -188,12 +238,12 @@ if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
 
     public double getLargeur() {
         return sprite.getWidth();
-        
+
     }
 
     public double getHauteur() {
         return sprite.getHeight();
-        
+
     }
 
     public void recevoirDegats(int degats) {
@@ -248,14 +298,14 @@ if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
             ex.printStackTrace();
         }
     }
-    
+
     public static void CreationJoueur(String pseudo) {
         try {
             Connection connexion = SingletonJDBC.getInstance().getConnection();
             PreparedStatement requete = connexion.prepareStatement("INSERT INTO Joueurs VALUES (?, ?, ?, NOW(),0)");
-            
+
             requete.setString(1, pseudo);
-            requete.setDouble(2,10.0);
+            requete.setDouble(2, 10.0);
             requete.setDouble(3, 10.0);
             requete.executeUpdate();
             requete.close();
@@ -263,30 +313,33 @@ if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
             ex.printStackTrace();
         }
     }
+
     public static void viderJoueurs() {
-    Connection connexion = SingletonJDBC.getInstance().getConnection();
+        Connection connexion = SingletonJDBC.getInstance().getConnection();
 
-    try (PreparedStatement requete = connexion.prepareStatement("DELETE FROM Joueurs")) {
-        requete.executeUpdate();
-    } catch (SQLException ex) {
-        ex.printStackTrace();
+        try (PreparedStatement requete = connexion.prepareStatement("DELETE FROM Joueurs")) {
+            requete.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
-}
+
     public static void supprimerJoueur(String pseudo) {
-    if (pseudo == null || pseudo.trim().isEmpty()) {
-        return;
-    }
-    String sql = "DELETE FROM Joueurs WHERE pseudo = ?";
-    Connection connexion = SingletonJDBC.getInstance().getConnection();
+        if (pseudo == null || pseudo.trim().isEmpty()) {
+            return;
+        }
+        String sql = "DELETE FROM Joueurs WHERE pseudo = ?";
+        Connection connexion = SingletonJDBC.getInstance().getConnection();
 
-    try (PreparedStatement requete = connexion.prepareStatement(sql)) {
-        requete.setString(1, pseudo.trim());
-        requete.executeUpdate();
-    } catch (SQLException ex) {
-        ex.printStackTrace();
+        try (PreparedStatement requete = connexion.prepareStatement(sql)) {
+            requete.setString(1, pseudo.trim());
+            requete.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
-}
-     public void closeTable(){
+
+    public void closeTable() {
         try {
             this.connexion.close();
 
@@ -295,5 +348,5 @@ if (positionModifiee && maintenant - derniereSync >= DELAI_SYNC_MS) {
         }
 
     }
-    
+
 }
