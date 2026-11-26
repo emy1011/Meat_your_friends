@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Inventaire {
 
-    private Map<String, Integer> objets = new LinkedHashMap<>();
+    private Map <String, Integer> objets = new LinkedHashMap<>();
 
     public void ajouterItem(Item item) {
         String nom = item.getNom();
