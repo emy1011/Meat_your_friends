@@ -18,8 +18,8 @@ public class Vache extends Animal {
         super();
         this.vitesseDeplacement = 1; // Vitesse propre au lapin
         this.vie = 90;               // Points de vie
-        this.dist = 100;              // Distance d'attaque
-        this.nom_item = "Steak";     // Ou viande de lapin selon ton jeu
+        this.dist = 30;              // Distance d'attaque
+        this.nom_item = "Steak";    
         this.compteurDeplacement=20;
         this.xmin=0;
         this.xmax=300;

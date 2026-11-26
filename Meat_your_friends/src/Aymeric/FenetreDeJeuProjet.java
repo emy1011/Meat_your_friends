@@ -10,7 +10,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-
+//explication texte_map : 
+//
 public class FenetreDeJeuProjet extends JFrame {
 
     // Passe a true pour voir les collisions en rouge
