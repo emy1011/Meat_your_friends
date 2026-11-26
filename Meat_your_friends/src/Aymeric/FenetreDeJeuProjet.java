@@ -94,6 +94,14 @@ public int LONGITUDE_MAX ;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
+
+    public int getLATITUDE_MAX() {
+        return LATITUDE_MAX;
+    }
+
+    public int getLONGITUDE_MAX() {
+        return LONGITUDE_MAX;
+    }
     
     
 }
