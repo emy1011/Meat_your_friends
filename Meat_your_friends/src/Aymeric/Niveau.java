@@ -20,7 +20,7 @@ public class Niveau {
     private int[][][] calques;             // calques[calque][ligne][colonne]
 
     public Niveau(String cheminRessource) {
-        
+        System.err.println(cheminRessource);
         try (InputStream in = Niveau.class.getResourceAsStream(cheminRessource)) {
             if (in == null) {
                 throw new IllegalStateException("Fichier introuvable : " + cheminRessource);
