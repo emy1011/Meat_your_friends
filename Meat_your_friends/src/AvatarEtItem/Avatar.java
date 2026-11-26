@@ -55,7 +55,6 @@ public class Avatar {
         this.toucheBas = false;
         this.toucheHaut = false;
         this.inventaire = new Inventaire();
-
         this.nom = nom;
         this.map = map;
 
@@ -82,7 +81,6 @@ public class Avatar {
 
         return false;
 
-       
 
     }
 

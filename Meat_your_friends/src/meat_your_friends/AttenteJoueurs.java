@@ -4,6 +4,7 @@
  */
 package meat_your_friends;
 
+import AvatarEtItem.FenetreDeJeu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -16,66 +17,71 @@ import javax.swing.Timer;
  *
  * @author abaglin
  */
-public class AttenteJoueurs extends javax.swing.JFrame {
+  
 
-   
-    private static final int nbJoueursVoulu = 4;
+    public class AttenteJoueurs extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AttenteJoueurs.class.getName());
-    private final String pseudo;
-    private final Timer timer;
-    private boolean jeuLance = false;
+        private static final int nbJoueursVoulu = 2;
 
-    /**
-     * Creates new form AttenteJoueurs
-     */
-    public AttenteJoueurs(String pseudo) {
-        initComponents();
-        this.pseudo = pseudo;
-        jLabel1.setText("Bonjour : " + pseudo);
-    ActionListener listener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                verifierJoueurs();
-            }
-        };
+        private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AttenteJoueurs.class.getName());
+        private final String pseudo;
+        private final Timer timer;
+        private boolean jeuLance = false;
 
-        this.timer = new Timer(1000, listener);
-        this.timer.start();
-        verifierJoueurs();
-    }
-
-    private void verifierJoueurs() {
-        if (jeuLance) {
-            return;
-        }
-
-        try (Connection connexion = DriverManager.getConnection("jdbc:mariadb://nemrod.ens2m.fr:3306/2026-2027_s1_vs1_tp2_meat_your_friends", "etudiant", "YTDTvj9TR3CDYCmP");
-             PreparedStatement ps = connexion.prepareStatement("SELECT COUNT(*) FROM Joueurs");
-             ResultSet rs = ps.executeQuery()) {
-
-            if (rs.next()) {
-                int nbJoueurs = rs.getInt(1);
-                jLabel2.setText("nb joueurs connecté : " + nbJoueurs + " / " + nbJoueursVoulu);
-
-                if (nbJoueurs >= nbJoueursVoulu) {
-                    jeuLance = true;
-                    this.timer.stop();
-                    
-                    lancerJeu();
-                    
+        /**
+         * Creates new form AttenteJoueurs
+         */
+        public AttenteJoueurs(String pseudo) {
+            initComponents();
+            this.pseudo = pseudo;
+            jLabel1.setText("Bonjour : " + pseudo);
+            ActionListener listener = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    verifierJoueurs();
                 }
-            }
-        } catch (Exception ex) {
-            logger.log(java.util.logging.Level.SEVERE, "Erreur lors du comptage des joueurs", ex);
+            };
+
+            this.timer = new Timer(1000, listener);
+            this.timer.start();
+            verifierJoueurs();
         }
-    }
-private void lancerJeu() {
-        LancementJeu fenetreJeu = new LancementJeu(this.pseudo);
-        fenetreJeu.setVisible(true);
-        this.setVisible(false);
-        this.dispose();
-    }
+
+        private void verifierJoueurs() {
+            if (jeuLance) {
+                return;
+            }
+
+            try (Connection connexion = DriverManager.getConnection("jdbc:mariadb://nemrod.ens2m.fr:3306/2026-2027_s1_vs1_tp2_meat_your_friends", "etudiant", "YTDTvj9TR3CDYCmP"); PreparedStatement ps = connexion.prepareStatement("SELECT COUNT(*) FROM Joueurs"); ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+                    int nbJoueurs = rs.getInt(1);
+                    jLabel2.setText("nb joueurs connecté : " + nbJoueurs + " / " + nbJoueursVoulu);
+
+                    if (nbJoueurs >= nbJoueursVoulu) {
+                        jeuLance = true;
+                        this.timer.stop();
+
+                        lancerJeu();
+
+                    }
+                }
+            } catch (Exception ex) {
+                logger.log(java.util.logging.Level.SEVERE, "Erreur lors du comptage des joueurs", ex);
+            }
+        }
+
+        private void lancerJeu() {
+            if (this.timer != null) {
+                this.timer.stop();
+            }
+            FenetreDeJeu fenetreJeu = new FenetreDeJeu();
+            fenetreJeu.setVisible(true);
+            this.setVisible(false);
+            this.dispose();
+        }
+    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
