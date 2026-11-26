@@ -1,4 +1,3 @@
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -22,15 +21,17 @@ public class Inventaire {
         String nom = item.getNom();
         objets.put(nom, objets.getOrDefault(nom, 0) + 1);
     }
-    
+
     public void vider() {
-    objets.clear();
-}
+        objets.clear();
+    }
 
     public void rendu(Graphics2D g, int largeurEcran, int hauteurEcran) {
 
         int hauteurBarre = 80;
         int yBarre = hauteurEcran - hauteurBarre;
+
+        g.fillRect(0, yBarre, largeurEcran, hauteurBarre);
 
         // Fond de l'inventaire
         g.setColor(new Color(40, 40, 40));

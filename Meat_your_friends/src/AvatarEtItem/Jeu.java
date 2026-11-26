@@ -16,7 +16,7 @@ import Aymeric.CarteColision;
 
 /**
  *
- * 
+ *
  */
 public class Jeu {
 
@@ -75,7 +75,8 @@ public class Jeu {
         this.av.rendu(contexte);
         this.uneTomate.rendu(contexte);
         this.unLapin.rendu(contexte);
-        this.av.getInventaire().rendu(contexte,960,960);
+        this.av.getInventaire().rendu(contexte, 1300, 1061);
+
     }
 
     public boolean collisionAnimal() {
@@ -107,6 +108,7 @@ public class Jeu {
         return av;
     }
 
-   
-
 }
+
+
+
