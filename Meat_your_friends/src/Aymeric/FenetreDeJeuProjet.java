@@ -1,5 +1,9 @@
 package Aymeric;
-
+//explication texte_map : 
+//lignes 1 à 3 : largeur, hauteur, taille d'une tuile
+// ligne 4 à 33 : sol (herbe, terre...)
+//ligne 34 à 63 : décor (arbres, maisons, barrières...)
+//ligne 64 à 93 : collision (1=bloqué, 0=libre)
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
