@@ -4,6 +4,7 @@ package Aymeric;
 // ligne 4 à 33 : sol (herbe, terre...)
 //ligne 34 à 63 : décor (arbres, maisons, barrières...)
 //ligne 64 à 93 : collision (1=bloqué, 0=libre)
+//pour voir quelles zones bloquées, remplacer dans ce code DEBUG_COLLISIONS = false par true et lancer la map : les zones rouges seront bloquées
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
